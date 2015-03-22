@@ -1,15 +1,44 @@
-## Put comments here that give an overall description of what your
-## functions do
+## this function is the same as the example given in the
+## assignment to create a special "vector"
 
-## Write a short comment describing this function
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(x=matrix()) {
+  jen = NULL
+  set = function(y) {
+    x <<- y
+    jen <<- NULL
+  }
+  get = function() x
+  setinv = function(inverse) jen <<- inverse
+  getinv = function() jen
+  list (set=set, get=get, setinv=setinv, getinv=getinv)
 }
 
 
-## Write a short comment describing this function
+## the following function caching the inverse of the Matrix
 
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function (x, ...) {
+  jen = x$getinv()
+  if(!is.null(jen)) {
+    message("getting cached data")
+    return(jen)
+  }
+  mat.data = x$get()
+  jen = solve(mat.data, ...)
+  x$setinv(jen)
+  return(jen)
+  
 }
+
+## this script tests the results
+
+test = function(matrixN) {
+  jentest = makeCacheMatrix(matrixN)
+  start.time = Sys.time()
+  cacheSolve(jentest)
+  dur = Sys.time() - start.time
+  print(dur)
+  
+}
+
+  
